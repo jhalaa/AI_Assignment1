@@ -1,3 +1,5 @@
+import data.GraphData;
+
 import java.util.List;
 
 public interface SearchStrategizer {

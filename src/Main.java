@@ -1,9 +1,9 @@
-import java.util.ArrayList;
-import java.util.Arrays;
+import data.GraphData;
+
 import java.util.List;
 import java.util.Scanner;
 
-public class AI_Assignment1 {
+public class Main {
     public static void main(String[] args) {
         SearchStrategizer mySearch = null;
         Scanner s = new Scanner(System.in);
