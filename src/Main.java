@@ -12,6 +12,12 @@ public class Main {
         System.out.println("Please enter the search strategy.\n 1:dfs 2:bfs 3:lowest cost  4:best-first 5:deep-limited 6:iterative-deepening");
         int option = s.nextInt();
 
+        System.out.println("Enter the search node");
+        String src = s.next();
+
+        System.out.println("Enter the destination node");
+        String dest = s.next();
+
         switch (option) {
             case 1:
                 mySearch = new Dfs();
@@ -36,7 +42,7 @@ public class Main {
                 break;
         }
 
-        mySearch.search(myGraph);
+        mySearch.search(myGraph,src,dest);
 
     }
 

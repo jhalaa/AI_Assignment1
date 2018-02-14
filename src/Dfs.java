@@ -1,31 +1,33 @@
 
 import data.GraphData;
 
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Dfs implements SearchStrategizer {
-    public void search(List<GraphData> graph) {
+    public List<List<String>> search(List<GraphData> graph, String src, String dest) {
+        Set<String> visited= new HashSet<>();
+        List<List<String>> result = new ArrayList<>();
 
-        //Source node -> hard coded right nw. Make it argument later
-        String srcNode = "";
-
-        //Source node -> hard coded right nw. Make it argument later
-        String destNode = "";
-
-        Stack<String> frontier = new Stack<>();
-        frontier.add(srcNode);
+        Stack<List<String>> frontier = new Stack<>();
+        frontier.add(Arrays.asList(src));
 
         while(!frontier.isEmpty()){
-            String curr = frontier.pop();
-            for(GraphData node: graph){
-                if(node.getFrom().equals(curr)){
-                    if(node.getTo().equals(destNode))
-                        return ;
-                    else
-                        frontier.push(node.getTo());
+            List<String> curr = frontier.pop();
+            String lastNode = curr.get(curr.size() - 1);
+            if(visited.add(lastNode)){
+                for(GraphData node: graph){
+                    if(node.getFrom().equals(lastNode)){
+                        curr.add(node.getTo());
+                        if(node.getTo().equals(dest))
+                            result.add(curr);
+                        else
+                            frontier.push(curr);
+                    }
                 }
             }
         }
+
+        return result;
     }
+
 }
