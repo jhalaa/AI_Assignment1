@@ -6,27 +6,30 @@ import data.GraphNode;
 import java.util.*;
 
 public class LowestCost implements SearchStrategizer {
-    public List<List<GraphNode>> search(Graph graph, GraphNode src, GraphNode dest) {
+    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest) {
+        List<List<GraphEdges>> result = new ArrayList<>();
 
-        Set<String> visited = new HashSet<>();
-        List<List<String>> result = new ArrayList<>();
+        Comparator<List<GraphEdges>> comparator = new Comparator<List<GraphEdges>>() {
+            @Override
+            public int compare(List<GraphEdges> o1, List<GraphEdges> o2) {
+                return Integer.compare(o1.get(o1.size()-1).getCost(),o2.get(o2.size()-1).getCost());
+            }
+        };
+        Queue<List<GraphEdges>> frontier = new PriorityQueue<List<GraphEdges>>(comparator);
 
-        Queue<List<String>> frontier = new PriorityQueue<>();
+        frontier.addAll((Collection<? extends List<GraphEdges>>) graph.getEdges().stream().filter(edge -> edge.getFrom().equals(src)));
 
-        frontier.add(Arrays.asList(src));
-
-        while(!frontier.isEmpty()){
-            List<String> curr = frontier.poll();
-            String lastNode = curr.get(curr.size() - 1);
-            if(visited.add(lastNode)){
-                for(GraphEdges node: graph){
-                    if(node.getFrom().equals(lastNode)){
-                        curr.add(node.getTo());
-                        if(node.getTo().equals(dest))
-                            result.add(curr);
-                        else
-                            frontier.add(curr);
-                    }
+        while (!frontier.isEmpty()) {
+            List<GraphEdges> curr = frontier.poll();
+            GraphNode lastNode = curr.get(curr.size() - 1).getTo();
+            for (GraphEdges edge : graph.getEdges()) {
+                if (edge.getFrom().equals(lastNode)) {
+                    List<GraphEdges> temp = curr;
+                    temp.add(edge);
+                    if (edge.getTo().equals(dest))
+                        result.add(temp);
+                    else
+                        frontier.add(temp);
                 }
             }
         }
