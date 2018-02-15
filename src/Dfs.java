@@ -18,8 +18,9 @@ public class Dfs implements SearchStrategizer {
         while (!frontier.isEmpty()) {
             List<GraphEdges> curr = frontier.pop();
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
+            Set<GraphNode> visited = new HashSet<>();
             for (GraphEdges edge : graph.getEdges()) {
-                if (edge.getFrom().equals(lastNode)) {
+                if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo())) {
                     List<GraphEdges> temp = curr;
                     temp.add(edge);
                     if (edge.getTo().equals(dest))
