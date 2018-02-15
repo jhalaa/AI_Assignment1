@@ -1,11 +1,12 @@
-import data.GraphData;
+import data.Graph;
+import data.GraphNode;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 public class Bfs implements SearchStrategizer {
-    public List<List<String>> search(List<GraphData> graph, String src, String dest) {
+    public List<List<GraphNode>> search(Graph graph, GraphNode src, GraphNode dest) {
 
         //Source node -> hard coded right nw. Make it argument later
         String srcNode = "";

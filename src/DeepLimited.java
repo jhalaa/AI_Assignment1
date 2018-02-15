@@ -1,9 +1,10 @@
-import data.GraphData;
+import data.Graph;
+import data.GraphNode;
 
 import java.util.List;
 
 public class DeepLimited implements SearchStrategizer {
-    public List<List<String>> search(List<GraphData> graph, String src, String dest) {
+    public List<List<GraphNode>> search(Graph graph, GraphNode src, GraphNode dest) {
 
     }
 }

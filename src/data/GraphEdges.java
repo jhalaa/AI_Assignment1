@@ -1,21 +1,21 @@
 package data;
 
-public class GraphData{
-    private String from;
-    private String to;
+public class GraphEdges {
+    private GraphNode from;
+    private GraphNode to;
     private int cost;
 
-    public GraphData(String from, String to, int cost){
+    public GraphEdges(GraphNode from, GraphNode to, int cost){
         this.from = from;
         this.to=to;
         this.cost=cost;
     }
 
-    public String getFrom() {
+    public GraphNode getFrom() {
         return from;
     }
 
-    public String getTo() {
+    public GraphNode getTo() {
         return to;
     }
 
