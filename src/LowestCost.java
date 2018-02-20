@@ -1,4 +1,3 @@
-
 import data.Graph;
 import data.GraphEdges;
 import data.GraphNode;
@@ -6,7 +5,7 @@ import data.GraphNode;
 import java.util.*;
 
 public class LowestCost implements SearchStrategizer {
-    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest) {
+    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest) throws IllegalArgumentException {
         List<List<GraphEdges>> result = new ArrayList<>();
 
         Comparator<List<GraphEdges>> comparator = new Comparator<List<GraphEdges>>() {
@@ -16,8 +15,14 @@ public class LowestCost implements SearchStrategizer {
             }
         };
         Queue<List<GraphEdges>> frontier = new PriorityQueue<List<GraphEdges>>(comparator);
-
-        frontier.addAll((Collection<? extends List<GraphEdges>>) graph.getEdges().stream().filter(edge -> edge.getFrom().equals(src)));
+        if (frontier.isEmpty()) {
+            throw new IllegalArgumentException("Start node is not in the graph!");
+        }
+        frontier.addAll((Collection<? extends List<GraphEdges>>)
+                graph.getEdges()
+                        .stream()
+                        .filter(edge -> edge.getFrom()
+                                .equals(src)));
 
         while (!frontier.isEmpty()) {
             List<GraphEdges> curr = frontier.poll();

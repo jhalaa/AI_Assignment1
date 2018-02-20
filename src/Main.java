@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalArgumentException {
         SearchStrategizer mySearch = null;
         Scanner s = new Scanner(System.in);
         Graph myGraph = Initialiser.initializeGraph();

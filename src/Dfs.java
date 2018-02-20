@@ -1,4 +1,3 @@
-
 import data.Graph;
 import data.GraphEdges;
 import data.GraphNode;
@@ -7,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Dfs implements SearchStrategizer {
-    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest) {
+    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest) throws IllegalArgumentException {
 
         //List of all paths from src to goal node.
         List<List<GraphEdges>> result = new ArrayList<>();
@@ -15,11 +14,12 @@ public class Dfs implements SearchStrategizer {
         Stack<List<GraphEdges>> frontier = new Stack<>();
         frontier.push( (List)
                 graph.getEdges()
-                .stream()
-                .filter(edge -> edge.getFrom().equals(src))
-                .collect(Collectors.toList()));
-
-
+                        .stream()
+                        .filter(edge -> edge.getFrom().equals(src))
+                        .collect(Collectors.toList()));
+        if (frontier.isEmpty()) {
+            throw new IllegalArgumentException("Start node is not in the graph!");
+        }
         while (!frontier.isEmpty()) {
             List<GraphEdges> curr = frontier.pop();
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
@@ -49,7 +49,7 @@ public class Dfs implements SearchStrategizer {
             result.add(edge.getTo());
             result.add(edge.getFrom());
         }
-           return result;
+        return result;
     }
 
 }

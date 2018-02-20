@@ -5,14 +5,15 @@ import data.GraphNode;
 import java.util.*;
 
 public class DeepLimited implements SearchStrategizer {
-    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest) {
+    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest) throws IllegalArgumentException {
         //List of all paths from src to goal node.
         List<List<GraphEdges>> result = new ArrayList<>();
 
         Stack<List<GraphEdges>> frontier = new Stack<>();
         frontier.addAll((Collection<? extends List<GraphEdges>>) graph.getEdges().stream().filter(edge -> edge.getFrom().equals(src)));
-
-
+        if (frontier.isEmpty()) {
+            throw new IllegalArgumentException("Start node is not in the graph!");
+        }
         while (!frontier.isEmpty()) {
             List<GraphEdges> curr = frontier.pop();
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
