@@ -5,7 +5,7 @@ import data.GraphNode;
 import java.util.*;
 
 public class LowestCost implements SearchStrategizer {
-    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest) throws IllegalArgumentException {
+    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
         List<List<GraphEdges>> result = new ArrayList<>();
 
         Comparator<List<GraphEdges>> comparator = new Comparator<List<GraphEdges>>() {
@@ -32,8 +32,12 @@ public class LowestCost implements SearchStrategizer {
                 if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo())) {
                     List<GraphEdges> temp = curr;
                     temp.add(edge);
-                    if (edge.getTo().equals(dest))
+                    if (edge.getTo().equals(dest)) {
                         result.add(temp);
+                        if (!searchMode) {
+                            return result;
+                        }
+                    }
                     else
                         frontier.add(temp);
                 }

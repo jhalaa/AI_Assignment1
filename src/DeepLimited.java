@@ -5,8 +5,8 @@ import data.GraphNode;
 import java.util.*;
 
 public class DeepLimited implements SearchStrategizer {
-    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest) throws IllegalArgumentException {
-        //List of all paths from src to goal node.
+    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
+
         List<List<GraphEdges>> result = new ArrayList<>();
 
         Stack<List<GraphEdges>> frontier = new Stack<>();
@@ -25,8 +25,12 @@ public class DeepLimited implements SearchStrategizer {
                 if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo()) && limit > 0) {
                     List<GraphEdges> temp = curr;
                     temp.add(edge);
-                    if (edge.getTo().equals(dest))
+                    if (edge.getTo().equals(dest)) {
                         result.add(temp);
+                        if (!searchMode) {
+                            return result;
+                        }
+                    }
                     else
                         frontier.push(temp);
                     limit--;

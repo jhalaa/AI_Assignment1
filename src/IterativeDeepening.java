@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.Stack;
 
 public class IterativeDeepening implements SearchStrategizer {
-    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest) throws IllegalArgumentException {
+    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
         List<List<GraphEdges>> result = new ArrayList<>();
         int depth = 0;
         //return the first path from src to dest

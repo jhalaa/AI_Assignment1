@@ -20,6 +20,19 @@ public class Main {
         System.out.println("Enter the destination node");
         GraphNode dest = new GraphNode(s.next());
 
+        System.out.println("Enter the search mode. \n 0: first-solution 1: all-solutions");
+        int searchModeOption = s.nextInt();
+
+        boolean searchMode = false;
+        switch (searchModeOption) {
+            case 0:
+                searchMode = false;
+                break;
+            case 1:
+                searchMode = true;
+                break;
+        }
+
         switch (option) {
             case 1:
                 mySearch = new Dfs();
@@ -44,7 +57,7 @@ public class Main {
                 break;
         }
 
-        mySearch.search(myGraph,src,dest);
+        mySearch.search(myGraph,src,dest, searchMode);
 
     }
 

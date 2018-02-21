@@ -6,9 +6,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Dfs implements SearchStrategizer {
-    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest) throws IllegalArgumentException {
+    public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
 
-        //List of all paths from src to goal node.
         List<List<GraphEdges>> result = new ArrayList<>();
 
         Stack<List<GraphEdges>> frontier = new Stack<>();
@@ -29,8 +28,12 @@ public class Dfs implements SearchStrategizer {
                 if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo())) {
                     List<GraphEdges> temp = curr;
                     temp.add(edge);
-                    if (edge.getTo().equals(dest))
+                    if (edge.getTo().equals(dest)) {
                         result.add(temp);
+                        if (!searchMode) {
+                            return result;
+                        }
+                    }
                     else
                         frontier.push(temp);
                 }
