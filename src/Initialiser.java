@@ -14,7 +14,7 @@ public class Initialiser {
         GraphNode ts = new GraphNode("ts");
         GraphNode o103 = new GraphNode("o103");
         GraphNode o109 = new GraphNode("o109");
-        GraphNode o119 = new GraphNode("o111");
+        GraphNode o119 = new GraphNode("o119");
         GraphNode b1 = new GraphNode("b1");
         GraphNode b2 = new GraphNode("b2");
         GraphNode b3 = new GraphNode("b3");
