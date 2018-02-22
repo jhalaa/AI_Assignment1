@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -8,7 +7,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
-import java.util.Stack;
 
 import data.Graph;
 import data.GraphEdges;
@@ -21,35 +19,32 @@ public class AStar implements SearchStrategizer {
     @Override
     public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
         List<List<GraphEdges>> result = new ArrayList<>();
-        Stack<List<GraphEdges>> frontier = new Stack<>();
+
+        if (!graph.getNodes().contains(src) || !graph.getNodes().contains(dest)) {
+            throw new IllegalArgumentException("Start or goal node is not in the graph!");
+        }
 
         Comparator<List<GraphEdges>> comparator = new Comparator<List<GraphEdges>>() {
             @Override
             public int compare(List<GraphEdges> o1, List<GraphEdges> o2) {
-                return Integer.compare(getF(o2, dest),getF(o1, dest));
+                return Integer.compare(getF(o1, dest),getF(o2, dest));
             }
         };
-        Queue<List<GraphEdges>> pq = new PriorityQueue<List<GraphEdges>>(comparator);
+        Queue<List<GraphEdges>> frontier = new PriorityQueue<List<GraphEdges>>(comparator);
 
         for (GraphEdges edge : graph.getEdges()) {
             if (edge.getFrom().equals(src)) {
-                pq.add(new ArrayList<GraphEdges>(Arrays.asList(edge)));
+                frontier.add(new ArrayList<GraphEdges>(Arrays.asList(edge)));
             }
         }
 
-        if (pq.isEmpty()) {
-            throw new IllegalArgumentException("Start node is not in the graph!");
-        }
-        while (!pq.isEmpty()) {
-            frontier.push(pq.poll());
-        }
+        Set<GraphNode> visited = new HashSet<>();
+        visited.add(src);
         while (!frontier.isEmpty()) {
-            List<GraphEdges> curr = frontier.pop();
+            List<GraphEdges> curr = frontier.poll();
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
-            Set<GraphNode> visited = new HashSet<>();
-            visited.addAll(getValuesFrom(curr));
             for (GraphEdges edge : graph.getEdges()) {
-                if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo())) {
+                if (edge.getFrom().equals(lastNode) && !visited.contains(edge.getTo())) {
                     List<GraphEdges> temp = new ArrayList<>(curr);
                     temp.add(edge);
                     if (edge.getTo().equals(dest)) {
@@ -57,26 +52,14 @@ public class AStar implements SearchStrategizer {
                         return result;
                     }
                     else
-                        pq.add(temp);
+                        frontier.add(temp);
                 }
             }
-            while (!pq.isEmpty()) {
-                frontier.push(pq.poll());
-            }
+            visited.add(lastNode);
         }
         return result;
     }
 
-    private List<GraphNode> getValuesFrom(List<GraphEdges> curr) {
-        List<GraphNode> result = new ArrayList<>();
-        Iterator iterator = curr.iterator();
-        while (iterator.hasNext()){
-            GraphEdges edge = (GraphEdges) iterator.next();
-            result.add(edge.getTo());
-            result.add(edge.getFrom());
-        }
-        return result;
-    }
 
     private int getF(List<GraphEdges> list, GraphNode dest) {
         if (list.isEmpty()) {
