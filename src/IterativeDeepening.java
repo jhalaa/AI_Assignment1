@@ -13,21 +13,28 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 public class IterativeDeepening implements SearchStrategizer {
+    static int BOUND = 3;
+    static int depth = 1;
+
     public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
         List<List<GraphEdges>> result = new ArrayList<>();
-        int depth = 0;
-        //return the first path from src to dest
-        while(true) {
-            DLS(graph, src, depth, result, dest);
+
+        while(depth < BOUND) {
+            DLS(graph, src, result, dest, searchMode);
             if (!result.isEmpty()) {
-                break;
+                return result;
             }
             depth++;
+        }
+        if (depth == BOUND && result.isEmpty()) {
+            System.out.println("Bound is reached and no path is found! Repeat the search by raising the Bound.");
+            BOUND++;
+            return search(graph, src, dest, searchMode);
         }
         return result;
     }
 
-    private void DLS(Graph graph, GraphNode src, int depth, List<List<GraphEdges>> result, GraphNode dest) {
+    private void DLS(Graph graph, GraphNode src, List<List<GraphEdges>> result, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
         Stack<List<GraphEdges>> frontier = new Stack<>();
 
         for (GraphEdges edge : graph.getEdges()) {
@@ -35,23 +42,28 @@ public class IterativeDeepening implements SearchStrategizer {
                 frontier.push(new ArrayList<GraphEdges>(Arrays.asList(edge)));
             }
         }
+        if (frontier.isEmpty()) {
+            throw new IllegalArgumentException("Start node is not in the graph!");
+        }
 
+        int d = depth;
         while (!frontier.isEmpty()) {
             List<GraphEdges> curr = frontier.pop();
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
-            System.out.println(curr.toString());
             Set<GraphNode> visited = new HashSet<>();
             visited.addAll(getValuesFrom(curr));
             for (GraphEdges edge : graph.getEdges()) {
-                if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo()) && depth > 0) {
+                if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo()) && d > 0) {
                     List<GraphEdges> temp = new ArrayList<>(curr);
                     temp.add(edge);
                     if (edge.getTo().equals(dest)) {
                         result.add(temp);
-                        return;
+                        if (!searchMode) {
+                            return;
+                        }
                     }
                     frontier.push(temp);
-                    depth--;
+                    d--;
                 }
             }
         }
