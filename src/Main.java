@@ -5,9 +5,13 @@ import data.GraphNode;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.System.exit;
+
 public class Main {
     public static void main(String[] args) throws IllegalArgumentException {
         SearchStrategizer mySearch = null;
+        List<List<GraphEdges>> result = null;
+
         Scanner s = new Scanner(System.in);
         Graph myGraph = Initialiser.initializeGraph();
 
@@ -56,9 +60,15 @@ public class Main {
                 mySearch = new Dfs();
                 break;
         }
-
-        mySearch.search(myGraph,src,dest, searchMode);
-
+        System.out.print("The result is --->");
+        try {
+            result = mySearch.search(myGraph, src, dest, searchMode);
+        }
+        catch (Exception e) {
+            System.out.println("An error has occured. Please try again!");
+            exit(0);
+        }
+        System.out.println(result.toString());
     }
 
 
