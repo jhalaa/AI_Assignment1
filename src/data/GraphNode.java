@@ -1,7 +1,7 @@
 package data;
 
 public class GraphNode {
-    private String name;
+    public String name;
 
     public GraphNode(String name){
         this.name = name;

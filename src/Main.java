@@ -60,7 +60,7 @@ public class Main {
                 mySearch = new Dfs();
                 break;
         }
-        System.out.print("The result is --->");
+        System.out.println("The result is:");
         try {
             result = mySearch.search(myGraph, src, dest, searchMode);
         }
@@ -68,8 +68,6 @@ public class Main {
             System.out.println("An error has occured. Please try again!");
             exit(0);
         }
-        System.out.println(result.toString());
+        System.out.println(ResultFormatter.format(result));
     }
-
-
 }
