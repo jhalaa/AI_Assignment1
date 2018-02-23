@@ -11,11 +11,12 @@ public class Dfs implements SearchStrategizer {
         List<List<GraphEdges>> result = new ArrayList<>();
 
         Stack<List<GraphEdges>> frontier = new Stack<>();
-        frontier.push( (List)
-                graph.getEdges()
-                        .stream()
-                        .filter(edge -> edge.getFrom().equals(src))
-                        .collect(Collectors.toList()));
+        for (GraphEdges edge : graph.getEdges()) {
+            if (edge.getFrom().equals(src)) {
+                frontier.push(new ArrayList<GraphEdges>(Arrays.asList(edge)));
+            }
+        }
+
         if (frontier.isEmpty()) {
             throw new IllegalArgumentException("Start node is not in the graph!");
         }
@@ -26,7 +27,7 @@ public class Dfs implements SearchStrategizer {
             visited.addAll(getValuesFrom(curr));
             for (GraphEdges edge : graph.getEdges()) {
                 if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo())) {
-                    List<GraphEdges> temp = curr;
+                    List<GraphEdges> temp = new ArrayList<>(curr);
                     temp.add(edge);
                     if (edge.getTo().equals(dest)) {
                         result.add(temp);

@@ -10,7 +10,11 @@ public class DeepLimited implements SearchStrategizer {
         List<List<GraphEdges>> result = new ArrayList<>();
 
         Stack<List<GraphEdges>> frontier = new Stack<>();
-        frontier.addAll((Collection<? extends List<GraphEdges>>) graph.getEdges().stream().filter(edge -> edge.getFrom().equals(src)));
+        for (GraphEdges edge : graph.getEdges()) {
+            if (edge.getFrom().equals(src)) {
+                frontier.push(new ArrayList<GraphEdges>(Arrays.asList(edge)));
+            }
+        }
         if (frontier.isEmpty()) {
             throw new IllegalArgumentException("Start node is not in the graph!");
         }
@@ -18,12 +22,13 @@ public class DeepLimited implements SearchStrategizer {
             List<GraphEdges> curr = frontier.pop();
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
             Set<GraphNode> visited = new HashSet<>();
+            visited.addAll(getValuesFrom(curr));
 
             //limit hard coded to 3 - should dynamically accept later
             int limit = 3;
             for (GraphEdges edge : graph.getEdges()) {
                 if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo()) && limit > 0) {
-                    List<GraphEdges> temp = curr;
+                    List<GraphEdges> temp = new ArrayList<>(curr);
                     temp.add(edge);
                     if (edge.getTo().equals(dest)) {
                         result.add(temp);
@@ -38,6 +43,17 @@ public class DeepLimited implements SearchStrategizer {
             }
         }
 
+        return result;
+    }
+
+    private List<GraphNode> getValuesFrom(List<GraphEdges> curr) {
+        List<GraphNode> result = new ArrayList<>();
+        Iterator iterator = curr.iterator();
+        while (iterator.hasNext()){
+            GraphEdges edge = (GraphEdges) iterator.next();
+            result.add(edge.getTo());
+            result.add(edge.getFrom());
+        }
         return result;
     }
 }

@@ -15,22 +15,23 @@ public class LowestCost implements SearchStrategizer {
             }
         };
         Queue<List<GraphEdges>> frontier = new PriorityQueue<List<GraphEdges>>(comparator);
+        for (GraphEdges edge : graph.getEdges()) {
+            if (edge.getFrom().equals(src)) {
+                frontier.add(new ArrayList<GraphEdges>(Arrays.asList(edge)));
+            }
+        }
         if (frontier.isEmpty()) {
             throw new IllegalArgumentException("Start node is not in the graph!");
         }
-        frontier.addAll((Collection<? extends List<GraphEdges>>)
-                graph.getEdges()
-                        .stream()
-                        .filter(edge -> edge.getFrom()
-                                .equals(src)));
 
         while (!frontier.isEmpty()) {
             List<GraphEdges> curr = frontier.poll();
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
             Set<GraphNode> visited = new HashSet<>();
+            visited.addAll(getValuesFrom(curr));
             for (GraphEdges edge : graph.getEdges()) {
                 if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo())) {
-                    List<GraphEdges> temp = curr;
+                    List<GraphEdges> temp = new ArrayList<>(curr);
                     temp.add(edge);
                     if (edge.getTo().equals(dest)) {
                         result.add(temp);
@@ -46,5 +47,15 @@ public class LowestCost implements SearchStrategizer {
 
         return result;
 
+    }
+    private List<GraphNode> getValuesFrom(List<GraphEdges> curr) {
+        List<GraphNode> result = new ArrayList<>();
+        Iterator iterator = curr.iterator();
+        while (iterator.hasNext()){
+            GraphEdges edge = (GraphEdges) iterator.next();
+            result.add(edge.getTo());
+            result.add(edge.getFrom());
+        }
+        return result;
     }
 }
