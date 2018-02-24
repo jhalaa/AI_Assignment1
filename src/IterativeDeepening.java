@@ -31,6 +31,8 @@ public class IterativeDeepening implements SearchStrategizer {
             BOUND++;
             return search(graph, src, dest, searchMode);
         }
+        if(result.isEmpty())
+            throw new IllegalArgumentException("No path Exists!");
         return result;
     }
 
@@ -46,8 +48,8 @@ public class IterativeDeepening implements SearchStrategizer {
                 frontier.push(new ArrayList<GraphEdges>(Arrays.asList(edge)));
             }
         }
-        if (frontier.isEmpty()) {
-            throw new IllegalArgumentException("Start node is not in the graph!");
+        if (!graph.getNodes().contains(src) || !graph.getNodes().contains(dest)) {
+            throw new IllegalArgumentException("Start or goal node is not in the graph!");
         }
 
         int d = depth;

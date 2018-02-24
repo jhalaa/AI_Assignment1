@@ -24,8 +24,8 @@ public class LowestCost implements SearchStrategizer {
                 frontier.add(new ArrayList<GraphEdges>(Arrays.asList(edge)));
             }
         }
-        if (frontier.isEmpty()) {
-            throw new IllegalArgumentException("Start node is not in the graph!");
+        if (!graph.getNodes().contains(src) || !graph.getNodes().contains(dest)) {
+            throw new IllegalArgumentException("Start or goal node is not in the graph!");
         }
 
         while (!frontier.isEmpty()) {
@@ -48,7 +48,8 @@ public class LowestCost implements SearchStrategizer {
                 }
             }
         }
-
+        if(result.isEmpty())
+            throw new IllegalArgumentException("No path Exists!");
         return result;
 
     }
