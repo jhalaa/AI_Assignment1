@@ -22,4 +22,15 @@ public class GraphEdges {
     public int getCost() {
         return cost;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        GraphEdges edge = (GraphEdges) obj;
+        return this.getFrom().equals(edge.getFrom()) && this.getTo().equals(edge.getTo()) && this.getCost()==edge.getCost();
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getTo().hashCode() + this.getFrom().hashCode();
+    }
 }
