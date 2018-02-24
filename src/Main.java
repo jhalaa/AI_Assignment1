@@ -15,7 +15,7 @@ public class Main {
         Scanner s = new Scanner(System.in);
         Graph myGraph = Initialiser.initializeGraph();
 
-        System.out.println("Please enter the search strategy.\n 1:dfs 2:bfs 3:lowest cost  4:best-first 5:deep-limited 6:iterative-deepening");
+        System.out.println("Please enter the search strategy.\n 1:dfs 2:bfs 3:lowest cost  4:best-first 5:deep-limited 6:iterative-deepening 7:A -Star 8:Informal Search Using Heuristic ");
         int option = s.nextInt();
 
         System.out.println("Enter the search node");
@@ -55,6 +55,12 @@ public class Main {
                 break;
             case 6:
                 mySearch = new IterativeDeepening();
+                break;
+            case 7:
+                mySearch = new AStar();
+                break;
+            case 8:
+                mySearch = new InformalSearchUsingHeuristic();
                 break;
             default:
                 mySearch = new Dfs();
