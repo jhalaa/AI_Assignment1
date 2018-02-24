@@ -37,6 +37,10 @@ public class IterativeDeepening implements SearchStrategizer {
     private void DLS(Graph graph, GraphNode src, List<List<GraphEdges>> result, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
         Stack<List<GraphEdges>> frontier = new Stack<>();
 
+        //if source and destination are the same
+        if(src.equals(dest))
+            throw new IllegalArgumentException("Source and destination are the same");
+
         for (GraphEdges edge : graph.getEdges()) {
             if (edge.getFrom().equals(src)) {
                 frontier.push(new ArrayList<GraphEdges>(Arrays.asList(edge)));

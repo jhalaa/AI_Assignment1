@@ -20,6 +20,10 @@ public class AStar implements SearchStrategizer {
     public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
         List<List<GraphEdges>> result = new ArrayList<>();
 
+        //if source and destination are the same
+        if(src.equals(dest))
+            throw new IllegalArgumentException("Source and destination are the same");
+
         if (!graph.getNodes().contains(src) || !graph.getNodes().contains(dest)) {
             throw new IllegalArgumentException("Start or goal node is not in the graph!");
         }

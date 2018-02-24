@@ -9,6 +9,10 @@ public class DeepLimited implements SearchStrategizer {
 
         List<List<GraphEdges>> result = new ArrayList<>();
 
+        //if source and destination are the same
+        if(src.equals(dest))
+            throw new IllegalArgumentException("Source and destination are the same");
+
         Stack<List<GraphEdges>> frontier = new Stack<>();
         for (GraphEdges edge : graph.getEdges()) {
             if (edge.getFrom().equals(src)) {

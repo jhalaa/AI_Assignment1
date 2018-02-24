@@ -10,6 +10,10 @@ public class Bfs implements SearchStrategizer {
 
         List<List<GraphEdges>> result = new ArrayList<>();
 
+        //if source and destination are the same
+        if(src.equals(dest))
+            throw new IllegalArgumentException("Source and destination are the same");
+
         Queue<List<GraphEdges>> frontier = new LinkedList<>();
         for (GraphEdges edge : graph.getEdges()) {
             if (edge.getFrom().equals(src)) {

@@ -8,6 +8,10 @@ public class LowestCost implements SearchStrategizer {
     public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
         List<List<GraphEdges>> result = new ArrayList<>();
 
+        //if source and destination are the same
+        if(src.equals(dest))
+            throw new IllegalArgumentException("Source and destination are the same");
+
         Comparator<List<GraphEdges>> comparator = new Comparator<List<GraphEdges>>() {
             @Override
             public int compare(List<GraphEdges> o1, List<GraphEdges> o2) {
