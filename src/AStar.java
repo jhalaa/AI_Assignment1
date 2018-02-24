@@ -1,12 +1,5 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import data.Graph;
 import data.GraphEdges;
@@ -24,6 +17,7 @@ public class AStar implements SearchStrategizer {
         if(src.equals(dest))
             throw new IllegalArgumentException("Source and destination are the same");
 
+        // if source or destination not present in graph
         if (!graph.getNodes().contains(src) || !graph.getNodes().contains(dest)) {
             throw new IllegalArgumentException("Start or goal node is not in the graph!");
         }
@@ -34,13 +28,15 @@ public class AStar implements SearchStrategizer {
                 return Integer.compare(getF(o1, dest),getF(o2, dest));
             }
         };
-        Queue<List<GraphEdges>> frontier = new PriorityQueue<List<GraphEdges>>(comparator);
 
-        for (GraphEdges edge : graph.getEdges()) {
-            if (edge.getFrom().equals(src)) {
-                frontier.add(new ArrayList<GraphEdges>(Arrays.asList(edge)));
-            }
-        }
+        // adding source and destination to frontier
+        Queue<List<GraphEdges>> frontier = new PriorityQueue<List<GraphEdges>>(comparator);
+        List initialNodes = graph.getEdges()
+                .stream()
+                .filter(edge -> edge.getFrom().equals(src))
+                .map(edge -> {List temp =new ArrayList(); temp.add(edge); return temp;})
+                .collect(Collectors.toList());
+        frontier.addAll(initialNodes);
 
         Set<GraphNode> visited = new HashSet<>();
         visited.add(src);

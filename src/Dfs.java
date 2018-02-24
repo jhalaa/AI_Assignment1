@@ -14,12 +14,15 @@ public class Dfs implements SearchStrategizer {
         if(src.equals(dest))
             throw new IllegalArgumentException("Source and destination are the same");
 
+        // adding source and destination to frontier
         Stack<List<GraphEdges>> frontier = new Stack<>();
-        for (GraphEdges edge : graph.getEdges()) {
-            if (edge.getFrom().equals(src)) {
-                frontier.push(new ArrayList<GraphEdges>(Arrays.asList(edge)));
-            }
-        }
+        List initialNodes = graph.getEdges()
+                .stream()
+                .filter(edge -> edge.getFrom().equals(src))
+                .map(edge -> {List temp =new ArrayList(); temp.add(edge); return temp;})
+                .collect(Collectors.toList());
+        frontier.addAll(initialNodes);
+
 
         if (!graph.getNodes().contains(src) || !graph.getNodes().contains(dest)) {
             throw new IllegalArgumentException("Start or goal node is not in the graph!");
