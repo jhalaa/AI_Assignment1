@@ -57,6 +57,8 @@ public class AStar implements SearchStrategizer {
             }
             visited.add(lastNode);
         }
+
+        // if result not found
         if(result.isEmpty())
             throw new IllegalArgumentException("No path Exists!");
         return result;

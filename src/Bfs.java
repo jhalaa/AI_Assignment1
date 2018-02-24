@@ -32,7 +32,7 @@ public class Bfs implements SearchStrategizer {
             List<GraphEdges> curr = frontier.remove();
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
             Set<GraphNode> visited = new HashSet<>();
-            visited.addAll(getValuesFrom(curr));
+            visited.addAll(MyHelper.getValuesFrom(curr));
             for (GraphEdges edge : graph.getEdges()) {
                 if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo())) {
                     List<GraphEdges> temp = new ArrayList<>(curr);
@@ -49,19 +49,11 @@ public class Bfs implements SearchStrategizer {
 
             }
         }
+
+        // if result not found
         if(result.isEmpty())
             throw new IllegalArgumentException("No path Exists!");
-        return result;
-    }
 
-    private List<GraphNode> getValuesFrom(List<GraphEdges> curr) {
-        List<GraphNode> result = new ArrayList<>();
-        Iterator iterator = curr.iterator();
-        while (iterator.hasNext()){
-            GraphEdges edge = (GraphEdges) iterator.next();
-            result.add(edge.getTo());
-            result.add(edge.getFrom());
-        }
         return result;
     }
 }
