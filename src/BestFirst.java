@@ -13,12 +13,7 @@ public class BestFirst implements SearchStrategizer {
         if(src.equals(dest))
             throw new IllegalArgumentException("Source and destination are the same");
 
-        Comparator<List<GraphEdges>> comparator = new Comparator<List<GraphEdges>>() {
-            @Override
-            public int compare(List<GraphEdges> o1, List<GraphEdges> o2) {
-                return Integer.compare(getH(o1, dest),getH(o2, dest));
-            }
-        };
+        Comparator<List<GraphEdges>> comparator = Comparator.comparingInt(o -> getH(o, dest));
 
         // adding source and destination to frontier
         Queue<List<GraphEdges>> frontier = new PriorityQueue<List<GraphEdges>>(comparator);
@@ -45,30 +40,15 @@ public class BestFirst implements SearchStrategizer {
             result.add(Arrays.asList(c));
         }
 
-        while (!frontier.isEmpty()) {
-            List<GraphEdges> curr = frontier.poll();
-            GraphNode lastNode = curr.get(curr.size() - 1).getTo();
-            Set<GraphNode> visited = new HashSet<>();
-            visited.addAll(MyHelper.getValuesFrom(curr));
-            for (GraphEdges edge : graph.getEdges()) {
-                if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo())) {
-                    List<GraphEdges> temp = new ArrayList<>(curr);
-                    temp.add(edge);
-                    if (edge.getTo().equals(dest)) {
-                        result.add(temp);
-                        if (!searchMode) {
-                            return result;
-                        }
-                    }
-                    else
-                        frontier.add(temp);
-                }
-            }
-        }
+        result = MyHelper.getResult(graph, result, dest, frontier);
 
         // if result not found
         if(result.isEmpty())
             throw new IllegalArgumentException("No path Exists!");
+
+        //if only first solution
+        if(!searchMode)
+            result.subList(1,result.size()).clear();
         return result;
     }
 

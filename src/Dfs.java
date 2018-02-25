@@ -38,31 +38,15 @@ public class Dfs implements SearchStrategizer {
             throw new IllegalArgumentException("Start or goal node is not in the graph!");
         }
 
-        while (!frontier.isEmpty()) {
-            List<GraphEdges> curr = frontier.pop();
-            GraphNode lastNode = curr.get(curr.size() - 1).getTo();
-            Set<GraphNode> visited = new HashSet<>();
-            visited.addAll(MyHelper.getValuesFrom(curr));
-            for (GraphEdges edge : graph.getEdges()) {
-                if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo())) {
-                    List<GraphEdges> temp = new ArrayList<>(curr);
-                    temp.add(edge);
-                    if (edge.getTo().equals(dest)) {
-                        result.add(temp);
-                        if (!searchMode) {
-                            return result;
-                        }
-                    }
-                    else
-                        frontier.push(temp);
-                }
-
-            }
-        }
+        result = MyHelper.getResult(graph, result, dest, frontier);
 
         // if result not found
         if(result.isEmpty())
             throw new IllegalArgumentException("No path Exists!");
+
+        //if only first solution
+        if(!searchMode)
+            result.subList(1,result.size()).clear();
         return result;
     }
 }

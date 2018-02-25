@@ -62,6 +62,9 @@ public class Main {
             case 8:
                 mySearch = new InformalSearchUsingHeuristic();
                 break;
+            case 9:
+                mySearch = new Bidirectional();
+                break;
             default:
                 mySearch = new Dfs();
                 break;
