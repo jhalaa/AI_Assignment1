@@ -69,4 +69,25 @@ public class MyHelper {
         }
         return result;
     }
+
+    public static boolean getResult(Graph graph, GraphNode dest, List<List<GraphEdges>> result, Queue<List<GraphEdges>> frontier, Set<GraphNode> visited) {
+        while (!frontier.isEmpty()) {
+            List<GraphEdges> curr = frontier.poll();
+            GraphNode lastNode = curr.get(curr.size() - 1).getTo();
+            for (GraphEdges edge : graph.getEdges()) {
+                if (edge.getFrom().equals(lastNode) && !visited.contains(edge.getTo())) {
+                    List<GraphEdges> temp = new ArrayList<>(curr);
+                    temp.add(edge);
+                    if (edge.getTo().equals(dest)) {
+                        result.add(temp);
+                        return true;
+                    }
+                    else
+                        frontier.add(temp);
+                }
+            }
+            visited.add(lastNode);
+        }
+        return false;
+    }
 }

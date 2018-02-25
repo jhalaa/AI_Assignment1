@@ -74,7 +74,8 @@ public class IterativeDeepening implements SearchStrategizer {
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
             Set<GraphNode> visited = new HashSet<>();
             visited.addAll(MyHelper.getValuesFrom(curr));
-            for (GraphEdges edge : graph.getEdges()) {
+            for (Iterator<GraphEdges> iterator = graph.getEdges().iterator(); iterator.hasNext(); ) {
+                GraphEdges edge = iterator.next();
                 if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo()) && d > 0) {
                     List<GraphEdges> temp = new ArrayList<>(curr);
                     temp.add(edge);

@@ -13,12 +13,8 @@ public class LowestCost implements SearchStrategizer {
         if(src.equals(dest))
             throw new IllegalArgumentException("Source and destination are the same");
 
-        Comparator<List<GraphEdges>> comparator = new Comparator<List<GraphEdges>>() {
-            @Override
-            public int compare(List<GraphEdges> o1, List<GraphEdges> o2) {
-                return Integer.compare(o1.get(o1.size()-1).getCost(),o2.get(o2.size()-1).getCost());
-            }
-        };
+        Comparator<List<GraphEdges>> comparator = Comparator.comparingInt(o -> o.get(o.size() - 1).getCost());
+
         // adding source and destination to frontier
         Queue<List<GraphEdges>> frontier = new PriorityQueue<List<GraphEdges>>(comparator);
         List initialNodes = graph.getEdges()

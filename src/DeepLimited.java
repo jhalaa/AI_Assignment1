@@ -39,6 +39,19 @@ public class DeepLimited implements SearchStrategizer {
             result.add(Arrays.asList(c));
         }
 
+        result = getResult(graph, dest, result, frontier);
+
+        // if result not found
+        if(result.isEmpty())
+            throw new IllegalArgumentException("No path Exists!");
+
+        //if only first solution
+        if(!searchMode)
+            result.subList(1,result.size()).clear();
+        return result;
+    }
+
+    private List<List<GraphEdges>> getResult(Graph graph, GraphNode dest, List<List<GraphEdges>> result, Stack<List<GraphEdges>> frontier) {
         while (!frontier.isEmpty()) {
             List<GraphEdges> curr = frontier.pop();
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
@@ -53,9 +66,6 @@ public class DeepLimited implements SearchStrategizer {
                     temp.add(edge);
                     if (edge.getTo().equals(dest)) {
                         result.add(temp);
-                        if (!searchMode) {
-                            return result;
-                        }
                     }
                     else
                         frontier.push(temp);
@@ -63,10 +73,6 @@ public class DeepLimited implements SearchStrategizer {
                 }
             }
         }
-
-        // if result not found
-        if(result.isEmpty())
-            throw new IllegalArgumentException("No path Exists!");
         return result;
     }
 }

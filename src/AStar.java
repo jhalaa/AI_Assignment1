@@ -52,23 +52,8 @@ public class AStar implements SearchStrategizer {
 
         Set<GraphNode> visited = new HashSet<>();
         visited.add(src);
-        while (!frontier.isEmpty()) {
-            List<GraphEdges> curr = frontier.poll();
-            GraphNode lastNode = curr.get(curr.size() - 1).getTo();
-            for (GraphEdges edge : graph.getEdges()) {
-                if (edge.getFrom().equals(lastNode) && !visited.contains(edge.getTo())) {
-                    List<GraphEdges> temp = new ArrayList<>(curr);
-                    temp.add(edge);
-                    if (edge.getTo().equals(dest)) {
-                        result.add(temp);
-                        return result;
-                    }
-                    else
-                        frontier.add(temp);
-                }
-            }
-            visited.add(lastNode);
-        }
+        if (MyHelper.getResult(graph, dest, result, frontier, visited))
+            return result;
 
         // if result not found
         if(result.isEmpty())
@@ -77,14 +62,12 @@ public class AStar implements SearchStrategizer {
     }
 
 
+
+
     private int getF(List<GraphEdges> list, GraphNode dest) {
-        if (list.isEmpty()) {
+        if (list.isEmpty())
             return Integer.MAX_VALUE;
-        }
-        int totalCost = 0;
-        for (int i = 0; i < list.size(); i++) {
-            totalCost += list.get(i).getCost();
-        }
+        int totalCost = list.stream().mapToInt(GraphEdges::getCost).sum();
         return totalCost + HeuristicCreater.HeuristicFunction(list.get(list.size() - 1).getTo(), dest);
     }
 }

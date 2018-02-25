@@ -43,24 +43,7 @@ public class InformalSearchUsingHeuristic implements SearchStrategizer {
             throw new IllegalArgumentException("Start or goal node is not in the graph!");
         }
 
-        while (!frontier.isEmpty()) {
-            List<GraphEdges> curr = frontier.poll();
-            GraphNode lastNode = curr.get(curr.size() - 1).getTo();
-            Set<GraphNode> visited = new HashSet<>();
-            visited.addAll(MyHelper.getValuesFrom(curr));
-            for (GraphEdges edge : graph.getEdges()) {
-                if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo())) {
-                    List<GraphEdges> temp = new ArrayList<>(curr);
-                    temp.add(edge);
-                    if (edge.getTo().equals(dest)) {
-                        result.add(temp);
-                        return result;
-                    }
-                    else
-                        frontier.add(temp);
-                }
-            }
-        }
+        result = MyHelper.getResult(graph, result, dest, frontier);
 
         // if result not found
         if(result.isEmpty())

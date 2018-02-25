@@ -4,8 +4,9 @@ import data.GraphNode;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-    public class Bidirectional implements SearchStrategizer {
+public class Bidirectional implements SearchStrategizer {
         public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
 
             List<List<GraphEdges>> result = new ArrayList<>();
@@ -61,25 +62,19 @@ import java.util.stream.Collectors;
                 GraphNode lastNode = curr_start.get(curr_start.size() - 1).getTo();
                 GraphNode firstNode = curr_dest.get(0).getFrom();
                 // adding all the toNodes from lastNode to the start_frontier
-                for (GraphEdges edge : graph.getEdges()) {
-                    if (edge.getFrom().equals(lastNode) && !start_visited.contains(edge.getTo())) {
-                        List<GraphEdges> temp = new ArrayList<>(curr_start);
-                        temp.add(edge);
-                        start_frontier.add(temp);
-                    }
-
-                }
+                graph.getEdges().stream().filter(edge -> edge.getFrom().equals(lastNode) && !start_visited.contains(edge.getTo())).forEachOrdered(edge -> {
+                    List<GraphEdges> temp = new ArrayList<>(curr_start);
+                    temp.add(edge);
+                    start_frontier.add(temp);
+                });
                 start_visited.add(lastNode);
 
                 // adding all the fromNodes which to firstNode to the dest_frontier
-                for (GraphEdges edge : graph.getEdges()) {
-                    if (edge.getTo().equals(firstNode) && !dest_visited.contains(edge.getFrom())) {
-                        List<GraphEdges> temp2 = new ArrayList<>(curr_dest);
-                        temp2.add(0, edge);
-                        dest_frontier.add(temp2);
-                    }
-
-                }
+                graph.getEdges().stream().filter(edge -> edge.getTo().equals(firstNode) && !dest_visited.contains(edge.getFrom())).forEachOrdered(edge -> {
+                    List<GraphEdges> temp2 = new ArrayList<>(curr_dest);
+                    temp2.add(0, edge);
+                    dest_frontier.add(temp2);
+                });
                 dest_visited.add(firstNode);
 
                 // check if the two frontiers collision
@@ -116,10 +111,10 @@ import java.util.stream.Collectors;
                 int n = curr.size();
                 for (int i = 0; i < n; i++) {
                     if (curr.get(i).getTo().equals(node)) {
-                        List<GraphEdges> res = new ArrayList<>();
-                        for (int j = 0; j <= i; j++) {
-                            res.add(curr.get(j));
-                        }
+                        List<GraphEdges> res = IntStream
+                                .rangeClosed(0, i)
+                                .mapToObj(curr::get)
+                                .collect(Collectors.toList());
                         return res;
                     }
                 }
@@ -137,10 +132,10 @@ import java.util.stream.Collectors;
                 int n = curr.size();
                 for (int i = 0; i < n; i++) {
                     if (curr.get(i).getFrom().equals(node)) {
-                        List<GraphEdges> res = new ArrayList<>();
-                        for (int j = i; j < n; j++) {
-                            res.add(curr.get(j));
-                        }
+                        List<GraphEdges> res = IntStream
+                                .range(i, n)
+                                .mapToObj(curr::get)
+                                .collect(Collectors.toList());
                         return res;
                     }
                 }
