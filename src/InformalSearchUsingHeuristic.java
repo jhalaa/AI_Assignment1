@@ -54,9 +54,7 @@ public class InformalSearchUsingHeuristic implements SearchStrategizer {
                     temp.add(edge);
                     if (edge.getTo().equals(dest)) {
                         result.add(temp);
-                        if (!searchMode) {
-                            return result;
-                        }
+                        return result;
                     }
                     else
                         frontier.add(temp);
