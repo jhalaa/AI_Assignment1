@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class IterativeDeepening implements SearchStrategizer {
+    private static final int MAX_BOUND = 8;
     static int BOUND = 3;
     static int depth = 1;
 
@@ -19,15 +20,14 @@ public class IterativeDeepening implements SearchStrategizer {
             }
             depth++;
         }
+        // if result not found
         if (depth == BOUND && result.isEmpty()) {
             System.out.println("Bound is reached and no path is found! Repeat the search by raising the Bound.");
             BOUND++;
+            if(BOUND>MAX_BOUND)
+                throw new IllegalArgumentException("No path Exists!");
             return search(graph, src, dest, searchMode);
         }
-
-        // if result not found
-        if (result.isEmpty())
-            throw new IllegalArgumentException("No path Exists!");
         return result;
     }
 
@@ -55,6 +55,18 @@ public class IterativeDeepening implements SearchStrategizer {
         if (!graph.getNodes().contains(src) || !graph.getNodes().contains(dest)) {
             throw new IllegalArgumentException("Start or goal node is not in the graph!");
         }
+
+        // if a result of edge length one exists add to frontier
+        if(frontier.stream().anyMatch(list -> list.get(0).getTo().equals(dest))){
+            GraphEdges c = frontier.stream()
+                    .filter(list -> list.get(0).getTo().equals(dest))
+                    .flatMap(Collection::stream)
+                    .findFirst()
+                    .orElse(null);
+            frontier.remove(Arrays.asList(c));
+            result.add(Arrays.asList(c));
+        }
+
 
         int d = depth;
         while (!frontier.isEmpty()) {

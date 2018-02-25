@@ -34,6 +34,17 @@ public class BestFirst implements SearchStrategizer {
             throw new IllegalArgumentException("Start or goal node is not in the graph!");
         }
 
+        // if a result of edge length one exists add to frontier
+        if(frontier.stream().anyMatch(list -> list.get(0).getTo().equals(dest))){
+            GraphEdges c = frontier.stream()
+                    .filter(list -> list.get(0).getTo().equals(dest))
+                    .flatMap(Collection::stream)
+                    .findFirst()
+                    .orElse(null);
+            frontier.remove(Arrays.asList(c));
+            result.add(Arrays.asList(c));
+        }
+
         while (!frontier.isEmpty()) {
             List<GraphEdges> curr = frontier.poll();
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
