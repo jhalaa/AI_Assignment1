@@ -94,8 +94,7 @@ public class AStarTest {
         List<List<GraphEdges>> expected = new ArrayList<>();
 
         List<GraphEdges> le1 = new ArrayList<>();
-        le1.add(e1);
-        le1.add(e2);
+        
 
         expected.add(le1);
         assertEquals(search, expected);
