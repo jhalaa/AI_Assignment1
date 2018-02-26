@@ -82,14 +82,14 @@ public class Bidirectional implements SearchStrategizer {
                     collisionChecker = true;
                     List<GraphEdges> start_edges = new ArrayList<>(curr_start);
                     List<GraphEdges> dest_edges = fromNodeCheck(dest_frontier, lastNode);
-                    result.addAll(Arrays.asList(start_edges));
-                    result.addAll(Arrays.asList(dest_edges));
+                    start_edges.addAll(dest_edges);
+                    result.add(start_edges);
                 } else if (start_visited.contains(firstNode)) {
                     collisionChecker = true;
                     List<GraphEdges> dest_edges = new ArrayList<>(curr_dest);
                     List<GraphEdges> start_edges = toNodeCheck(start_frontier, firstNode);
-                    result.addAll(Arrays.asList(start_edges));
-                    result.addAll(Arrays.asList(dest_edges));
+                    start_edges.addAll(dest_edges);
+                    result.add(start_edges);
                 }
 
             }
