@@ -23,8 +23,10 @@ public class IterativeDeepening implements SearchStrategizer {
             return search(graph, src, dest, searchMode);
         }
 
-        // if result not found
-        if (result.isEmpty())
+        // if result is found
+        if (BOUND == MAX_BOUND && result.isEmpty()) {
+            throw new IllegalArgumentException("Search space is exhausted and No path founds!");
+        } else if (result.isEmpty())
             throw new IllegalArgumentException("No path Exists!");
 
         // check searchMode
