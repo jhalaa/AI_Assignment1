@@ -15,7 +15,7 @@ public class Main {
         Scanner s = new Scanner(System.in);
         Graph myGraph = Initialiser.initializeGraph();
 
-        System.out.println("Please enter the search strategy.\n 1:dfs 2:bfs 3:lowest cost  4:best-first 5:deep-limited 6:iterative-deepening 7:A -Star 8:Informal Search Using Heuristic ");
+        System.out.println("Please enter the search strategy.\n 1:dfs 2:bfs 3:lowest cost  4:best-first 5:deep-limited 6:iterative-deepening 7:A -Star 8:Informal Search Using Heuristic 9:Bidirectional");
         int option = s.nextInt();
 
         System.out.println("Enter the search node");
@@ -24,7 +24,7 @@ public class Main {
         System.out.println("Enter the destination node");
         GraphNode dest = new GraphNode(s.next());
 
-        System.out.println("Enter the search mode. \n 0: first-solution 1: all-solutions");
+        System.out.println("Enter the search mode. \n 0: first-solution 1: all-solutions \n Only the first solution returned for Heuristic Search and Bidirectional Search");
         int searchModeOption = s.nextInt();
 
         boolean searchMode = false;

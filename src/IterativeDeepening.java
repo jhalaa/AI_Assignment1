@@ -23,13 +23,21 @@ public class IterativeDeepening implements SearchStrategizer {
             return search(graph, src, dest, searchMode);
         }
 
-        // if result not found
-        if (result.isEmpty())
+        // if result is found
+        if (BOUND == MAX_BOUND && result.isEmpty()) {
+            throw new IllegalArgumentException("Search space is exhausted and No path founds!");
+        } else if (result.isEmpty())
             throw new IllegalArgumentException("No path Exists!");
 
-        //if only first solution
-        if(!searchMode)
-            result.subList(1,result.size()).clear();
+        // check searchMode
+        if(!searchMode) {
+            result.subList(1, result.size()).clear();
+        } else {
+            Set<List<GraphEdges>> deleteRepeat = new HashSet<>();
+            deleteRepeat.addAll(result);
+            result.clear();
+            result.addAll(deleteRepeat);
+        }
         return result;
     }
 
@@ -58,23 +66,29 @@ public class IterativeDeepening implements SearchStrategizer {
             throw new IllegalArgumentException("Start or goal node is not in the graph!");
         }
 
-        int d = depth;
+
         while (!frontier.isEmpty()) {
+//            System.out.println("d is " + d);
+
             List<GraphEdges> curr = frontier.pop();
+            //System.out.println("curr list is " + curr.toString());
             GraphNode lastNode = curr.get(curr.size() - 1).getTo();
             Set<GraphNode> visited = new HashSet<>();
             visited.addAll(MyHelper.getValuesFrom(curr));
+            int d = depth;
             for (GraphEdges edge : graph.getEdges()) {
-                if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo()) && d > 0) {
+                if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo())  && d > 0) {
                     List<GraphEdges> temp = new ArrayList<>(curr);
                     temp.add(edge);
                     if (edge.getTo().equals(dest)) {
                         result.add(temp);
+                        //System.out.println("current res is " + result.toString());
                     }
                     frontier.push(temp);
                     d--;
                 }
             }
+
         }
     }
 }
