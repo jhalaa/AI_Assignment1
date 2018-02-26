@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jhalaa/AI_Assignment1.svg?branch=master)](https://travis-ci.org/jhalaa/AI_Assignment1)
+
 AI assignment1
 
 Team Members
