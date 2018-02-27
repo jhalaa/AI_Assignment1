@@ -94,9 +94,23 @@ public class AStarTest {
         List<List<GraphEdges>> expected = new ArrayList<>();
 
         List<GraphEdges> le1 = new ArrayList<>();
-        
+        le1.add(e1);
+        le1.add(e2);
 
         expected.add(le1);
         assertEquals(search, expected);
     }
+
+    @Test
+    void aStarFromMailToO109MultipleSolution() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = aStar.search(Initialiser.initializeGraph(), mail, o109, true);
+        List<List<GraphEdges>> expected = new ArrayList<>();
+
+        List<GraphEdges> le1 = new ArrayList<>();
+        le1.addAll(Arrays.asList(e1,e2,e3));
+
+        expected.add(le1);
+        assertEquals(search, expected);
+    }
+
 }

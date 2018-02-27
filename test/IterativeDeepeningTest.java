@@ -61,7 +61,7 @@ public class IterativeDeepeningTest {
         try{
             iterativeDeepening.search(Initialiser.initializeGraph(), new GraphNode("c2"), new GraphNode("b1"), true);
         } catch (IllegalArgumentException e) {
-            assertEquals(e.getMessage(),"No path Exists!");
+            assertEquals(e.getMessage(),"Search space is exhausted and No path founds!");
         }
     }
 
