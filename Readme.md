@@ -1,7 +1,6 @@
 [![Build Status](https://travis-ci.org/jhalaa/AI_Assignment1.svg?branch=master)](https://travis-ci.org/jhalaa/AI_Assignment1)
 [![Maintainability](https://api.codeclimate.com/v1/badges/72af7ed4e1eb1b9dd0e7/maintainability)](https://codeclimate.com/github/jhalaa/AI_Assignment1/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/72af7ed4e1eb1b9dd0e7/test_coverage)](https://codeclimate.com/github/jhalaa/AI_Assignment1/test_coverage)
-
+[![Coverage Status](https://coveralls.io/repos/github/jhalaa/AI_Assignment1/badge.svg?branch=master)](https://coveralls.io/github/jhalaa/AI_Assignment1?branch=master)
 AI assignment1
 
 Team Members
