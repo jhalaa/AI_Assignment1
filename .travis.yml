@@ -1,14 +1,7 @@
-env:
-  global:
-    - CC_TEST_REPORTER_ID=5fb5a7c538bd70f4d631e118976eabcd192e1449a2741bc3b958c69f573cc8bf
 language: java
 jdk:
   - oraclejdk8
-before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
 script:
   - mvn test -B
 after_script:
-  - ./cc-test-reporter after-build --exit-code target/site/jacoco-ut
+  - mvn coveralls:report
