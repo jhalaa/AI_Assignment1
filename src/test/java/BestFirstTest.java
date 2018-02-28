@@ -1,5 +1,4 @@
-import data.GraphEdges;
-import data.GraphNode;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.*;
@@ -8,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class IterativeDeepeningTest {
-    SearchStrategizer iterativeDeepening = new IterativeDeepening();
+public class BestFirstTest {
+    SearchStrategizer bestFirst = new BestFirst();
     GraphNode mail = new GraphNode("mail");
     GraphNode ts = new GraphNode("ts");
     GraphNode o103 = new GraphNode("o103");
@@ -29,45 +28,44 @@ public class IterativeDeepeningTest {
     GraphEdges e8 = new GraphEdges(b3,b4,7);
     GraphEdges e9 = new GraphEdges(b4,o109,7);
 
-
     @Test
-    void idsFromNodeToItselfShouldThrowError()  {
+    void bestfsFromNodeToItselfShouldThrowError()  {
         try{
-            iterativeDeepening.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ts"), false);
+            bestFirst.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ts"), false);
         } catch (IllegalArgumentException e) {
             assertEquals(e.getMessage(),"Source and destination are the same");
         }
     }
 
     @Test
-    void idsFromUnknownNodeShouldThrowError()  {
+    void bestfsFromUnknownNodeShouldThrowError()  {
         try{
-            iterativeDeepening.search(Initialiser.initializeGraph(), new GraphNode("ll"), new GraphNode("ts"), false);
+            bestFirst.search(Initialiser.initializeGraph(), new GraphNode("ll"), new GraphNode("ts"), false);
         } catch (IllegalArgumentException e) {
             assertEquals(e.getMessage(),"Start or goal node is not in the graph!");
         }
     }
     @Test
-    void idsToUnknownNodeShouldThrowError()  {
+    void bestfsToUnknownNodeShouldThrowError()  {
         try{
-            iterativeDeepening.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ll"), false);
+            bestFirst.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ll"), false);
         } catch (IllegalArgumentException e) {
             assertEquals(e.getMessage(),"Start or goal node is not in the graph!");
         }
     }
 
     @Test
-    void idsNoResultFoundShouldThrowError()  {
+    void bestfsNoResultFoundShouldThrowError()  {
         try{
-            iterativeDeepening.search(Initialiser.initializeGraph(), new GraphNode("c2"), new GraphNode("b1"), true);
+            bestFirst.search(Initialiser.initializeGraph(), new GraphNode("c2"), new GraphNode("b1"), true);
         } catch (IllegalArgumentException e) {
-            assertEquals(e.getMessage(),"Search space is exhausted and No path founds!");
+            assertEquals(e.getMessage(),"No path Exists!");
         }
     }
 
     @Test
-    void idsWithLegthOne() throws IllegalArgumentException {
-        List<List<GraphEdges>> search = iterativeDeepening.search(Initialiser.initializeGraph(), new GraphNode("mail"), new GraphNode("ts"), true);
+    void bestfsWithLegthOne() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = bestFirst.search(Initialiser.initializeGraph(), new GraphNode("mail"), new GraphNode("ts"), true);
         List<List<GraphEdges>> expected = new ArrayList<>();
         List<GraphEdges> le1 = new ArrayList<>();
         le1.add(e1);
@@ -77,8 +75,8 @@ public class IterativeDeepeningTest {
     }
 
     @Test
-    void idsFromMailToO103OneSolution() throws IllegalArgumentException {
-        List<List<GraphEdges>> search = iterativeDeepening.search(Initialiser.initializeGraph(), mail, o103, false);
+    void bestfsFromMailToO103OneSolution() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = bestFirst.search(Initialiser.initializeGraph(), mail, o103, false);
         List<List<GraphEdges>> expected = new ArrayList<>();
 
         List<GraphEdges> le1 = new ArrayList<>();
@@ -90,8 +88,8 @@ public class IterativeDeepeningTest {
     }
 
     @Test
-    void idsFromMailToO103MultipleSolution() throws IllegalArgumentException {
-        List<List<GraphEdges>> search = iterativeDeepening.search(Initialiser.initializeGraph(), mail, o103, true);
+    void bestfsFromMailToO103MultipleSolution() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = bestFirst.search(Initialiser.initializeGraph(), mail, o103, true);
         List<List<GraphEdges>> expected = new ArrayList<>();
 
         List<GraphEdges> le1 = new ArrayList<>();
@@ -99,6 +97,22 @@ public class IterativeDeepeningTest {
         le1.add(e2);
 
         expected.add(le1);
+        assertEquals(search, expected);
+    }
+
+    @Test
+    void bestfsFromMailToO109MultipleSolution() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = bestFirst.search(Initialiser.initializeGraph(), mail, o109, true);
+        List<List<GraphEdges>> expected = new ArrayList<>();
+
+        List<GraphEdges> le1 = new ArrayList<>();
+        List<GraphEdges> le2 = new ArrayList<>();
+        List<GraphEdges> le3 = new ArrayList<>();
+        le1.addAll(Arrays.asList(e1,e2,e3));
+        le2.addAll(Arrays.asList(e1,e2, e4,e8,e9));
+        le3.addAll(Arrays.asList(e1,e2, e4,e7,e5,e6,e9));
+
+        expected.addAll(Arrays.asList(le1,le2,le3));
         assertEquals(search, expected);
     }
 

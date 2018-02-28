@@ -1,22 +1,19 @@
-import data.Graph;
-import data.GraphEdges;
-import data.GraphNode;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BestFirst implements SearchStrategizer {
+public class DeepLimited implements SearchStrategizer {
     public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
+
         List<List<GraphEdges>> result = new ArrayList<>();
 
         //if source and destination are the same
         if(src.equals(dest))
             throw new IllegalArgumentException("Source and destination are the same");
 
-        Comparator<List<GraphEdges>> comparator = Comparator.comparingInt(o -> getH(o, dest));
-
         // adding source and destination to frontier
-        Queue<List<GraphEdges>> frontier = new PriorityQueue<List<GraphEdges>>(comparator);
+        Stack<List<GraphEdges>> frontier = new Stack<>();
         List initialNodes = graph.getEdges()
                 .stream()
                 .filter(edge -> edge.getFrom().equals(src))
@@ -40,7 +37,7 @@ public class BestFirst implements SearchStrategizer {
             result.add(Arrays.asList(c));
         }
 
-        result = MyHelper.getResult(graph, result, dest, frontier);
+        result = getResult(graph, dest, result, frontier);
 
         // if result not found
         if(result.isEmpty())
@@ -52,7 +49,28 @@ public class BestFirst implements SearchStrategizer {
         return result;
     }
 
-    private int getH(List<GraphEdges> list, GraphNode dest) {
-        return HeuristicCreater.HeuristicFunction(list.get(list.size() - 1).getTo(), dest);
+    private List<List<GraphEdges>> getResult(Graph graph, GraphNode dest, List<List<GraphEdges>> result, Stack<List<GraphEdges>> frontier) {
+        while (!frontier.isEmpty()) {
+            List<GraphEdges> curr = frontier.pop();
+            GraphNode lastNode = curr.get(curr.size() - 1).getTo();
+            Set<GraphNode> visited = new HashSet<>();
+            visited.addAll(MyHelper.getValuesFrom(curr));
+
+            //limit hard coded to 3 - should dynamically accept later
+            int limit = 3;
+            for (GraphEdges edge : graph.getEdges()) {
+                if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo()) && limit > 0) {
+                    List<GraphEdges> temp = new ArrayList<>(curr);
+                    temp.add(edge);
+                    if (edge.getTo().equals(dest)) {
+                        result.add(temp);
+                    }
+                    else
+                        frontier.push(temp);
+                    limit--;
+                }
+            }
+        }
+        return result;
     }
 }

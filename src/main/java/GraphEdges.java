@@ -1,5 +1,3 @@
-package data;
-
 public class GraphEdges {
     private GraphNode from;
     private GraphNode to;

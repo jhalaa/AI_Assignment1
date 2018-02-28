@@ -1,5 +1,3 @@
-package data;
-
 public class GraphNode {
     public String name;
 

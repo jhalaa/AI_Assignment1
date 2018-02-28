@@ -1,11 +1,9 @@
-import data.Graph;
-import data.GraphEdges;
-import data.GraphNode;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DeepLimited implements SearchStrategizer {
+public class Dfs implements SearchStrategizer {
     public List<List<GraphEdges>> search(Graph graph, GraphNode src, GraphNode dest, boolean searchMode) throws IllegalArgumentException {
 
         List<List<GraphEdges>> result = new ArrayList<>();
@@ -23,11 +21,6 @@ public class DeepLimited implements SearchStrategizer {
                 .collect(Collectors.toList());
         frontier.addAll(initialNodes);
 
-        // if source or destination not present in graph
-        if (!graph.getNodes().contains(src) || !graph.getNodes().contains(dest)) {
-            throw new IllegalArgumentException("Start or goal node is not in the graph!");
-        }
-
         // if a result of edge length one exists add to frontier
         if(frontier.stream().anyMatch(list -> list.get(0).getTo().equals(dest))){
             GraphEdges c = frontier.stream()
@@ -39,7 +32,11 @@ public class DeepLimited implements SearchStrategizer {
             result.add(Arrays.asList(c));
         }
 
-        result = getResult(graph, dest, result, frontier);
+        if (!graph.getNodes().contains(src) || !graph.getNodes().contains(dest)) {
+            throw new IllegalArgumentException("Start or goal node is not in the graph!");
+        }
+
+        result = MyHelper.getResult(graph, result, dest, frontier);
 
         // if result not found
         if(result.isEmpty())
@@ -48,31 +45,6 @@ public class DeepLimited implements SearchStrategizer {
         //if only first solution
         if(!searchMode)
             result.subList(1,result.size()).clear();
-        return result;
-    }
-
-    private List<List<GraphEdges>> getResult(Graph graph, GraphNode dest, List<List<GraphEdges>> result, Stack<List<GraphEdges>> frontier) {
-        while (!frontier.isEmpty()) {
-            List<GraphEdges> curr = frontier.pop();
-            GraphNode lastNode = curr.get(curr.size() - 1).getTo();
-            Set<GraphNode> visited = new HashSet<>();
-            visited.addAll(MyHelper.getValuesFrom(curr));
-
-            //limit hard coded to 3 - should dynamically accept later
-            int limit = 3;
-            for (GraphEdges edge : graph.getEdges()) {
-                if (edge.getFrom().equals(lastNode) && visited.add(edge.getTo()) && limit > 0) {
-                    List<GraphEdges> temp = new ArrayList<>(curr);
-                    temp.add(edge);
-                    if (edge.getTo().equals(dest)) {
-                        result.add(temp);
-                    }
-                    else
-                        frontier.push(temp);
-                    limit--;
-                }
-            }
-        }
         return result;
     }
 }

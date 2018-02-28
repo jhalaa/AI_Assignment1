@@ -1,7 +1,3 @@
-import data.Graph;
-import data.GraphEdges;
-import data.GraphNode;
-
 import java.util.List;
 
 public interface SearchStrategizer {

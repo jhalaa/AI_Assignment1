@@ -1,5 +1,3 @@
-import data.GraphEdges;
-import data.GraphNode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.*;
@@ -8,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BestFirstTest {
-    SearchStrategizer bestFirst = new BestFirst();
+public class LowestCostTest {
+    SearchStrategizer lowestCost = new LowestCost();
     GraphNode mail = new GraphNode("mail");
     GraphNode ts = new GraphNode("ts");
     GraphNode o103 = new GraphNode("o103");
@@ -29,44 +27,45 @@ public class BestFirstTest {
     GraphEdges e8 = new GraphEdges(b3,b4,7);
     GraphEdges e9 = new GraphEdges(b4,o109,7);
 
+
     @Test
-    void bestfsFromNodeToItselfShouldThrowError()  {
+    void lcsFromNodeToItselfShouldThrowError()  {
         try{
-            bestFirst.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ts"), false);
+            lowestCost.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ts"), false);
         } catch (IllegalArgumentException e) {
             assertEquals(e.getMessage(),"Source and destination are the same");
         }
     }
 
     @Test
-    void bestfsFromUnknownNodeShouldThrowError()  {
+    void lcsFromUnknownNodeShouldThrowError()  {
         try{
-            bestFirst.search(Initialiser.initializeGraph(), new GraphNode("ll"), new GraphNode("ts"), false);
+            lowestCost.search(Initialiser.initializeGraph(), new GraphNode("ll"), new GraphNode("ts"), false);
         } catch (IllegalArgumentException e) {
             assertEquals(e.getMessage(),"Start or goal node is not in the graph!");
         }
     }
     @Test
-    void bestfsToUnknownNodeShouldThrowError()  {
+    void lcsToUnknownNodeShouldThrowError()  {
         try{
-            bestFirst.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ll"), false);
+            lowestCost.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ll"), false);
         } catch (IllegalArgumentException e) {
             assertEquals(e.getMessage(),"Start or goal node is not in the graph!");
         }
     }
 
     @Test
-    void bestfsNoResultFoundShouldThrowError()  {
+    void lcsNoResultFoundShouldThrowError()  {
         try{
-            bestFirst.search(Initialiser.initializeGraph(), new GraphNode("c2"), new GraphNode("b1"), true);
+            lowestCost.search(Initialiser.initializeGraph(), new GraphNode("c2"), new GraphNode("b1"), true);
         } catch (IllegalArgumentException e) {
             assertEquals(e.getMessage(),"No path Exists!");
         }
     }
 
     @Test
-    void bestfsWithLegthOne() throws IllegalArgumentException {
-        List<List<GraphEdges>> search = bestFirst.search(Initialiser.initializeGraph(), new GraphNode("mail"), new GraphNode("ts"), true);
+    void lcsWithLegthOne() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = lowestCost.search(Initialiser.initializeGraph(), new GraphNode("mail"), new GraphNode("ts"), true);
         List<List<GraphEdges>> expected = new ArrayList<>();
         List<GraphEdges> le1 = new ArrayList<>();
         le1.add(e1);
@@ -76,8 +75,8 @@ public class BestFirstTest {
     }
 
     @Test
-    void bestfsFromMailToO103OneSolution() throws IllegalArgumentException {
-        List<List<GraphEdges>> search = bestFirst.search(Initialiser.initializeGraph(), mail, o103, false);
+    void lcsFromMailToO103OneSolution() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = lowestCost.search(Initialiser.initializeGraph(), mail, o103, false);
         List<List<GraphEdges>> expected = new ArrayList<>();
 
         List<GraphEdges> le1 = new ArrayList<>();
@@ -89,8 +88,8 @@ public class BestFirstTest {
     }
 
     @Test
-    void bestfsFromMailToO103MultipleSolution() throws IllegalArgumentException {
-        List<List<GraphEdges>> search = bestFirst.search(Initialiser.initializeGraph(), mail, o103, true);
+    void lcsFromMailToO103MultipleSolution() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = lowestCost.search(Initialiser.initializeGraph(), mail, o103, true);
         List<List<GraphEdges>> expected = new ArrayList<>();
 
         List<GraphEdges> le1 = new ArrayList<>();
@@ -102,8 +101,8 @@ public class BestFirstTest {
     }
 
     @Test
-    void bestfsFromMailToO109MultipleSolution() throws IllegalArgumentException {
-        List<List<GraphEdges>> search = bestFirst.search(Initialiser.initializeGraph(), mail, o109, true);
+    void lcsFromMailToO109MultipleSolution() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = lowestCost.search(Initialiser.initializeGraph(), mail, o109, true);
         List<List<GraphEdges>> expected = new ArrayList<>();
 
         List<GraphEdges> le1 = new ArrayList<>();
@@ -113,7 +112,7 @@ public class BestFirstTest {
         le2.addAll(Arrays.asList(e1,e2, e4,e8,e9));
         le3.addAll(Arrays.asList(e1,e2, e4,e7,e5,e6,e9));
 
-        expected.addAll(Arrays.asList(le1,le2,le3));
+        expected.addAll(Arrays.asList(le1,le3,le2));
         assertEquals(search, expected);
     }
 

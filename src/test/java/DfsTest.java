@@ -1,5 +1,4 @@
-import data.GraphEdges;
-import data.GraphNode;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.*;
@@ -8,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DeepLimitedTest {
-    SearchStrategizer deepLimited = new DeepLimited();
+public class DfsTest {
+    SearchStrategizer dfs = new Dfs();
     GraphNode mail = new GraphNode("mail");
     GraphNode ts = new GraphNode("ts");
     GraphNode o103 = new GraphNode("o103");
@@ -31,43 +30,43 @@ public class DeepLimitedTest {
 
 
     @Test
-    void dlsFromNodeToItselfShouldThrowError()  {
+    void dfsFromNodeToItselfShouldThrowError()  {
         try{
-            deepLimited.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ts"), false);
+            dfs.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ts"), false);
         } catch (IllegalArgumentException e) {
             assertEquals(e.getMessage(),"Source and destination are the same");
         }
     }
 
     @Test
-    void dlsFromUnknownNodeShouldThrowError()  {
+    void dfsFromUnknownNodeShouldThrowError()  {
         try{
-            deepLimited.search(Initialiser.initializeGraph(), new GraphNode("ll"), new GraphNode("ts"), false);
+            dfs.search(Initialiser.initializeGraph(), new GraphNode("ll"), new GraphNode("ts"), false);
         } catch (IllegalArgumentException e) {
             assertEquals(e.getMessage(),"Start or goal node is not in the graph!");
         }
     }
     @Test
-    void dlsToUnknownNodeShouldThrowError()  {
+    void dfsToUnknownNodeShouldThrowError()  {
         try{
-            deepLimited.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ll"), false);
+            dfs.search(Initialiser.initializeGraph(), new GraphNode("ts"), new GraphNode("ll"), false);
         } catch (IllegalArgumentException e) {
             assertEquals(e.getMessage(),"Start or goal node is not in the graph!");
         }
     }
 
     @Test
-    void dlsNoResultFoundShouldThrowError()  {
+    void bfsNoResultFoundShouldThrowError()  {
         try{
-            deepLimited.search(Initialiser.initializeGraph(), new GraphNode("c2"), new GraphNode("b1"), true);
+            dfs.search(Initialiser.initializeGraph(), new GraphNode("c2"), new GraphNode("b1"), true);
         } catch (IllegalArgumentException e) {
             assertEquals(e.getMessage(),"No path Exists!");
         }
     }
 
     @Test
-    void dlsWithLegthOne() throws IllegalArgumentException {
-        List<List<GraphEdges>> search = deepLimited.search(Initialiser.initializeGraph(), new GraphNode("mail"), new GraphNode("ts"), true);
+    void bfsWithLegthOne() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = dfs.search(Initialiser.initializeGraph(), new GraphNode("mail"), new GraphNode("ts"), true);
         List<List<GraphEdges>> expected = new ArrayList<>();
         List<GraphEdges> le1 = new ArrayList<>();
         le1.add(e1);
@@ -77,8 +76,8 @@ public class DeepLimitedTest {
     }
 
     @Test
-    void dlsFromMailToO103OneSolution() throws IllegalArgumentException {
-        List<List<GraphEdges>> search = deepLimited.search(Initialiser.initializeGraph(), mail, o103, false);
+    void bfsFromMailToO103OneSolution() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = dfs.search(Initialiser.initializeGraph(), mail, o103, false);
         List<List<GraphEdges>> expected = new ArrayList<>();
 
         List<GraphEdges> le1 = new ArrayList<>();
@@ -90,8 +89,8 @@ public class DeepLimitedTest {
     }
 
     @Test
-    void dlsFromMailToO103MultipleSolution() throws IllegalArgumentException {
-        List<List<GraphEdges>> search = deepLimited.search(Initialiser.initializeGraph(), mail, o103, true);
+    void bfsFromMailToO103MultipleSolution() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = dfs.search(Initialiser.initializeGraph(), mail, o103, true);
         List<List<GraphEdges>> expected = new ArrayList<>();
 
         List<GraphEdges> le1 = new ArrayList<>();
@@ -103,8 +102,8 @@ public class DeepLimitedTest {
     }
 
     @Test
-    void dlsFromMailToO109MultipleSolution() throws IllegalArgumentException {
-        List<List<GraphEdges>> search = deepLimited.search(Initialiser.initializeGraph(), mail, o109, true);
+    void bfsFromMailToO109MultipleSolution() throws IllegalArgumentException {
+        List<List<GraphEdges>> search = dfs.search(Initialiser.initializeGraph(), mail, o109, true);
         List<List<GraphEdges>> expected = new ArrayList<>();
 
         List<GraphEdges> le1 = new ArrayList<>();
@@ -117,7 +116,6 @@ public class DeepLimitedTest {
         expected.addAll(Arrays.asList(le1,le2,le3));
         assertEquals(search, expected);
     }
-
 
 
 }
