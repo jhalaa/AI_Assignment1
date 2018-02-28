@@ -4,4 +4,4 @@ jdk:
 script:
   - mvn test -B
 after_script:
-  - mvn coveralls:report
+  - mvn jacoco:report coveralls:report
